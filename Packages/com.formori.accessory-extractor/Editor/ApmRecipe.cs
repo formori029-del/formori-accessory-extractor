@@ -30,6 +30,7 @@ namespace AccessoryPrefabMaker
         public Vector3 rotationOffset;
         public Vector3 scale=Vector3.one;
         public PlacementMode placement;
+        public bool singleObject=true;
 
         public static ApmRecipe Capture(ApmOptions options)
         {
@@ -57,7 +58,7 @@ namespace AccessoryPrefabMaker
                 catch(InvalidOperationException) { result.sessionOnly=true; }
                 result.useCustomName=options.useCustomName;result.customName=options.customName;
                 result.mode=options.mode;result.automaticBones=options.automaticBones;result.faces=new List<int>(options.faces);result.outputName=options.name;result.useMA=options.useMA;result.excludeExternalColliders=options.excludeExternalColliders;
-                result.positionOffset=options.positionOffset;result.rotationOffset=options.rotationOffset;result.scale=options.scale;result.placement=options.placement;return result;
+                result.positionOffset=options.positionOffset;result.rotationOffset=options.rotationOffset;result.scale=options.scale;result.placement=options.placement;result.singleObject=options.singleObject;return result;
             }
             catch { DestroyImmediate(result);throw; }
         }
@@ -81,7 +82,7 @@ namespace AccessoryPrefabMaker
                 {
                     if(RigAnalysis.Path(avatarRoot,source.transform)!=rendererPath || (bone && RigAnalysis.Path(avatarRoot,bone)!=boneRootPath) || (attach && RigAnalysis.Path(avatarRoot,attach)!=attachmentPath)) { error=ApmLocalization.T("Renderer 또는 본 경로가 레시피와 다릅니다.");return false; }
                 }
-                options=new ApmOptions {source=source,avatarRoot=avatarRoot,boneRoot=bone,attachTarget=attach,mode=mode,automaticBones=automaticBones,faces=new List<int>(faces),name=outputName,useCustomName=version==1 || useCustomName,customName=version==1 ? outputName : customName,useMA=useMA,excludeExternalColliders=excludeExternalColliders,positionOffset=positionOffset,rotationOffset=rotationOffset,scale=scale,placement=placement};return true;
+                options=new ApmOptions {source=source,avatarRoot=avatarRoot,boneRoot=bone,attachTarget=attach,mode=mode,automaticBones=automaticBones,faces=new List<int>(faces),name=outputName,useCustomName=version==1 || useCustomName,customName=version==1 ? outputName : customName,useMA=useMA,excludeExternalColliders=excludeExternalColliders,positionOffset=positionOffset,rotationOffset=rotationOffset,scale=scale,placement=placement,singleObject=singleObject};return true;
             }
             catch(Exception e) { error=ApmLocalization.T("레시피 복원 실패: ")+e.Message;return false; }
         }

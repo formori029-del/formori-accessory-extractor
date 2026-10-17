@@ -9,7 +9,7 @@ namespace AccessoryPrefabMaker
     // Ground: original position ignored; centred on the ground (avatar feet, or world origin without an avatar).
     public enum PlacementMode { FollowSource, Ground }
 
-    public static class ApmVersion { public const string Current = "1.0.1"; }
+    public static class ApmVersion { public const string Current = "1.0.2"; }
 
     [Serializable]
     public sealed class ApmOptions
@@ -30,6 +30,9 @@ namespace AccessoryPrefabMaker
         public Vector3 rotationOffset;
         public Vector3 scale = Vector3.one;
         public PlacementMode placement = PlacementMode.FollowSource;
+        // MA attach: a mesh weighted 100% to one bone is saved as one object (Bone Proxy + renderer),
+        // so toggling that object (One-click Inventory, MA toggles) always reaches the mesh.
+        public bool singleObject = true;
         // Set by automatic tracing when the mesh is weighted to several body joints:
         // the copied armature is merged back into the avatar by MA Merge Armature.
         [NonSerialized] public bool bodyRig;

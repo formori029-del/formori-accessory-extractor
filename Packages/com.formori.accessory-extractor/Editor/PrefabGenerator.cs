@@ -58,6 +58,7 @@ namespace AccessoryPrefabMaker
                     if(!o.avatarRoot || !o.attachTarget) r.errors.Add(ApmLocalization.T("MA 출력에는 아바타 루트와 부착 대상이 필요합니다."));
                     else RigAnalysis.Path(o.avatarRoot,o.attachTarget);
                 }
+                if(CanCollapse(o)) r.details.Add(ApmLocalization.T("단일 본: Bone Proxy와 메쉬를 오브젝트 1개로 저장합니다."));
                 if(!AssetDatabase.Contains(mesh)) r.warnings.Add(ApmLocalization.T("원본 Mesh는 세션 전용입니다. 저장 레시피의 휴대용 복원은 사용할 수 없습니다."));
                 r.details.Add(ApmLocalization.T("선택 삼각형: ")+(o.faces==null ? 0:o.faces.Distinct().Count()));
             }
@@ -125,6 +126,7 @@ namespace AccessoryPrefabMaker
                 if(o.bodyRig) AddMergeArmature(o,(Transform)map[o.boneRoot]);
                 // A merged armature must keep the avatar frame; offsets would detach it from the body bones.
                 else {content.localPosition=o.positionOffset;content.localRotation=Quaternion.Euler(o.rotationOffset);content.localScale=o.scale;}
+                if(CanCollapse(o)) CollapseToRoot(result,(SkinnedMeshRenderer)renderer,content);
                 if(o.useMA && !o.bodyRig) AddBoneProxy(o,result.root);
                 AssertInternalReferences(result.root);
                 result.root.SetActive(true);
@@ -132,6 +134,47 @@ namespace AccessoryPrefabMaker
             }
             catch { result.Dispose();throw; }
             finally { if(baked) Object.DestroyImmediate(baked);if(slice!=null) slice.Dispose(); }
+        }
+        // One weighted bone and nothing else to carry: the bone only moves the mesh rigidly with the attach point.
+        public static bool CanCollapse(ApmOptions o)
+        {
+            if(o==null || !o.singleObject || !o.automaticBones || !o.useMA || o.bodyRig || o.mode!=ExtractionMode.Skinned || !(o.source is SkinnedMeshRenderer) || o.source.probeAnchor || !o.boneRoot) return false;
+            try { return RigAnalysis.RequiredBones(o).Length==1 && RigAnalysis.CopyComponents(o,RigAnalysis.CopyTransforms(o)).Length==0; }
+            catch(Exception) { return false; }
+        }
+        // Re-express the mesh in the root's frame and put the renderer on the root itself, removing Content and the bone copy.
+        // Without shape keys it becomes a plain MeshRenderer (one fewer skinned mesh for VRChat performance).
+        static void CollapseToRoot(GeneratedAccessory result,SkinnedMeshRenderer skinned,Transform content)
+        {
+            var root=result.root.transform;var mesh=result.mesh;
+            var matrix=root.worldToLocalMatrix*skinned.bones[0].localToWorldMatrix*mesh.bindposes[0];
+            Renderer output;
+            if(mesh.blendShapeCount==0)
+            {
+                var normalMatrix=matrix.inverse.transpose;
+                mesh.vertices=mesh.vertices.Select(matrix.MultiplyPoint3x4).ToArray();
+                if(mesh.normals.Length>0) mesh.normals=mesh.normals.Select(n=>normalMatrix.MultiplyVector(n).normalized).ToArray();
+                if(mesh.tangents.Length>0) mesh.tangents=mesh.tangents.Select(t=>{var v=matrix.MultiplyVector(new Vector3(t.x,t.y,t.z)).normalized;return new Vector4(v.x,v.y,v.z,t.w);}).ToArray();
+                mesh.boneWeights=new BoneWeight[0];mesh.bindposes=new Matrix4x4[0];mesh.RecalculateBounds();
+                result.root.AddComponent<MeshFilter>().sharedMesh=mesh;output=result.root.AddComponent<MeshRenderer>();
+            }
+            else
+            {
+                mesh.bindposes=new[]{matrix};
+                var skin=result.root.AddComponent<SkinnedMeshRenderer>();output=skin;
+                skin.sharedMesh=mesh;skin.bones=new[]{root};skin.rootBone=root;
+                skin.quality=skinned.quality;skin.updateWhenOffscreen=skinned.updateWhenOffscreen;skin.skinnedMotionVectors=skinned.skinnedMotionVectors;
+                var bounds=new Bounds(matrix.MultiplyPoint3x4(mesh.vertices[0]),Vector3.zero);
+                foreach(var v in mesh.vertices) bounds.Encapsulate(matrix.MultiplyPoint3x4(v));
+                skin.localBounds=bounds;
+                for(int i=0;i<mesh.blendShapeCount;i++) skin.SetBlendShapeWeight(i,skinned.GetBlendShapeWeight(i));
+            }
+            output.sharedMaterials=skinned.sharedMaterials;output.shadowCastingMode=skinned.shadowCastingMode;output.receiveShadows=skinned.receiveShadows;
+            output.lightProbeUsage=skinned.lightProbeUsage;output.reflectionProbeUsage=skinned.reflectionProbeUsage;output.allowOcclusionWhenDynamic=skinned.allowOcclusionWhenDynamic;
+            output.renderingLayerMask=skinned.renderingLayerMask;output.sortingLayerID=skinned.sortingLayerID;output.sortingOrder=skinned.sortingOrder;
+            output.motionVectorGenerationMode=skinned.motionVectorGenerationMode;output.enabled=skinned.enabled;
+            result.root.layer=skinned.gameObject.layer;
+            Object.DestroyImmediate(content.gameObject);
         }
         // Materials beyond the sub-mesh count are extra passes over the last sub-mesh (outline, fur...).
         public static Material[] SliceMaterials(Material[] materials,int sourceSubmeshes,int[] used)

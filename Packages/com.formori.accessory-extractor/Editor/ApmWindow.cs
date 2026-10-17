@@ -196,6 +196,9 @@ namespace AccessoryPrefabMaker
             using(new EditorGUI.DisabledScope(o.mode==ExtractionMode.Skinned && o.automaticBones))
                 o.attachTarget=(Transform)EditorGUILayout.ObjectField(ApmLocalization.T("부착 대상"),o.attachTarget,typeof(Transform),true);
             o.useMA=EditorGUILayout.Toggle(ApmLocalization.T("MA 부착"),o.useMA);
+            using(new EditorGUI.DisabledScope(!o.useMA || o.mode!=ExtractionMode.Skinned))
+            using(new EditorGUI.IndentLevelScope())
+                o.singleObject=EditorGUILayout.Toggle(ApmLocalization.T("본 하나면 오브젝트 1개로"),o.singleObject);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(ApmLocalization.T("크기 배율"));
             float scale=EditorGUILayout.FloatField(o.scale.x,GUILayout.Width(70));
@@ -427,6 +430,9 @@ namespace AccessoryPrefabMaker
             EditorGUI.BeginChangeCheck();
             using(new EditorGUI.DisabledScope(!(session.options.source is SkinnedMeshRenderer)))
                 session.options.useMA=EditorGUILayout.Toggle(ApmLocalization.T("MA 부착"),session.options.useMA);
+            using(new EditorGUI.DisabledScope(!session.options.useMA || !(session.options.source is SkinnedMeshRenderer)))
+            using(new EditorGUI.IndentLevelScope())
+                session.options.singleObject=EditorGUILayout.Toggle(ApmLocalization.T("본 하나면 오브젝트 1개로"),session.options.singleObject);
             if(EditorGUI.EndChangeCheck()) SelectionChanged();
         }
         void DrawSelection()

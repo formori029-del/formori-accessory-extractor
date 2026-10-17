@@ -1,5 +1,13 @@
 # 변경 기록
 
+## v1.0.2
+
+- **본 하나면 오브젝트 1개로**: 모자처럼 본 하나에만 100% 웨이트된 메쉬를 MA 부착으로 저장하면, Content·본 복사본 없이 Bone Proxy와 메쉬가 붙은 오브젝트 1개로 저장합니다.
+  - 원클릭 인벤토리·MA 토글을 그 오브젝트에 걸면 그대로 켜고 꺼집니다.
+  - 셰이프키가 없으면 일반 MeshRenderer로 저장해 스킨드 메쉬 수가 줄어듭니다. 셰이프키가 있으면 SkinnedMeshRenderer(본 = 자기 자신)로 둡니다.
+  - 본이 2개 이상이거나, PhysBone·Constraint·Probe Anchor가 있거나, 자동 추적을 끈 경우에는 지금처럼 본 계층째 저장합니다.
+  - "MA 부착" 아래 체크박스로 끌 수 있고, 레시피에도 저장됩니다.
+
 ## v1.0.1
 
 - VCC(VPM) 패키지 `com.formori.accessory-extractor`로도 배포합니다. VCC로 설치하면 이전 unitypackage 설치 폴더(`Assets/AccessoryPrefabMaker`)를 자동으로 정리합니다.

@@ -28,6 +28,8 @@ namespace AccessoryPrefabMaker
             {"복사 본 루트", new[]{"Bone root","ボーンルート"}},
             {"부착 대상", new[]{"Attach to","取り付け先"}},
             {"MA 부착", new[]{"MA attachment","MA 取り付け"}},
+            {"본 하나면 오브젝트 1개로", new[]{"One bone → one object","ボーン1本なら1オブジェクトに"}},
+            {"단일 본: Bone Proxy와 메쉬를 오브젝트 1개로 저장합니다.", new[]{"Single bone: Bone Proxy and mesh are saved as one object.","単一ボーン：Bone Proxy とメッシュを1つのオブジェクトとして保存します。"}},
             {"크기 배율", new[]{"Scale","倍率"}},
             {"초기화", new[]{"Reset","リセット"}},
             {"위치·회전 / 고급 설정", new[]{"Transform / advanced","位置・回転 / 詳細"}},

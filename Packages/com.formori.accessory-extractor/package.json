@@ -1,7 +1,7 @@
 {
   "name": "com.formori.accessory-extractor",
   "displayName": "FORMORI Accessory Extractor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "unity": "2022.3",
   "description": "Extract ribbons, brooches, necklaces and other accessories from outfits into their own mesh and prefab. Bones, PhysBones and constraints come along. / 의상에서 악세사리만 골라 새 메쉬·프리팹으로 분리합니다. / 衣装からアクセサリーだけを新しいメッシュ・プレハブに分離します。",
   "author": {
