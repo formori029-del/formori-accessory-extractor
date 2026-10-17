@@ -14,5 +14,6 @@
   "legacyFolders": {
     "Assets\\AccessoryPrefabMaker": "99bbd43aac7b58e4492bebf4a8e1e52b"
   },
-  "url": ""
+  "documentationUrl": "https://github.com/formori029-del/formori-accessory-extractor",
+  "changelogUrl": "https://github.com/formori029-del/formori-accessory-extractor/blob/main/Packages/com.formori.accessory-extractor/CHANGELOG.md"
 }

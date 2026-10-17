@@ -11,8 +11,10 @@ Extracts accessories from outfits into their own mesh and prefab; bones, PhysBon
 VCC → Settings → Packages → **Add Repository** →
 
 ```
-https://<GitHub 계정>.github.io/formori-accessory-extractor/index.json
+https://formori029-del.github.io/formori-accessory-extractor/index.json
 ```
+
+또는 이 링크를 누르면 바로 추가됩니다: `vcc://vpm/addRepo?url=https://formori029-del.github.io/formori-accessory-extractor/index.json`
 
 그 다음 프로젝트의 Manage Project에서 **FORMORI Accessory Extractor**를 추가합니다.
 unitypackage로 설치했던 `Assets/AccessoryPrefabMaker` 폴더는 VCC가 자동으로 정리합니다.
