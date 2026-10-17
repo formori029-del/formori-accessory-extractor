@@ -1,0 +1,6 @@
+{
+  "name": "AccessoryPrefabMaker.Editor",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
