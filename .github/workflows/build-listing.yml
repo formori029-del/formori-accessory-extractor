@@ -6,6 +6,9 @@ env:
   
 on: 
   workflow_dispatch:
+  # 다른 FORMORI 저장소(Blink Ears 등)의 새 릴리스도 하루 한 번 목록에 반영 (source.json 의 githubRepos)
+  schedule:
+    - cron: '17 3 * * *'
   workflow_run:
     workflows: [Build Release]
     types:

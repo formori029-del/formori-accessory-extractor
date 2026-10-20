@@ -1,0 +1,19 @@
+{
+  "name": "FORMORI Tools",
+  "id": "com.formori.accessory-extractor.listing",
+  "author": {
+    "name": "FORMORI",
+    "url": "https://zrpt.booth.pm/"
+  },
+  "url": "https://formori029-del.github.io/formori-accessory-extractor/index.json",
+  "description": "FORMORI 의 VRChat 툴 / FORMORI の VRChat ツール / VRChat tools by FORMORI (Accessory Extractor, Blink Ears)",
+  "infoLink": {
+    "text": "BOOTH",
+    "url": "https://zrpt.booth.pm/"
+  },
+  "bannerUrl": "banner.png",
+  "githubRepos": [
+    "formori029-del/formori-accessory-extractor",
+    "formori029-del/formori-blink-ears"
+  ]
+}

@@ -16,6 +16,8 @@ https://formori029-del.github.io/formori-accessory-extractor/index.json
 
 또는 이 링크를 누르면 바로 추가됩니다: `vcc://vpm/addRepo?url=https://formori029-del.github.io/formori-accessory-extractor/index.json`
 
+이 주소는 FORMORI 툴 공용 목록(FORMORI Tools)이라 **Blink Ears** 도 같이 뜹니다 (`source.json` 의 githubRepos).
+
 그 다음 프로젝트의 Manage Project에서 **FORMORI Accessory Extractor**를 추가합니다.
 unitypackage로 설치했던 `Assets/AccessoryPrefabMaker` 폴더는 VCC가 자동으로 정리합니다.
 
